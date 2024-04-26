@@ -5,9 +5,9 @@ Alignment of Language Models </h1>
 <div align="left">
     <a href='https://stevekgyang.github.io/' target='_blank'>Kailai Yang<sup>1,2</sup>&emsp;&emsp;
     <a target='_blank'>Zhiwei Liu<sup>1,2</sup></a>&emsp;
-    <a href='https://scholar.google.com.hk/citations?user=UYW7X_0AAAAJ&hl=zh-CN' target='_blank'>Qianqian Xie<sup>3</sup></a>
-    <a href='https://scholar.google.com.hk/citations?user=SnQ_CycAAAAJ&hl=zh-CN' target='_blank'>Jimin Huang<sup>3</sup></a>
-    <a href='https://www.zhangtianlin.top/' target='_blank'>Tianlin Zhang<sup>1,2</sup>
+    <a href='https://scholar.google.com.hk/citations?user=UYW7X_0AAAAJ&hl=zh-CN' target='_blank'>Qianqian Xie<sup>3</sup></a>&emsp;
+    <a href='https://scholar.google.com.hk/citations?user=SnQ_CycAAAAJ&hl=zh-CN' target='_blank'>Jimin Huang<sup>3</sup></a>&emsp;
+    <a href='https://www.zhangtianlin.top/' target='_blank'>Tianlin Zhang<sup>1,2</sup>&emsp;
     <a href='https://research.manchester.ac.uk/en/persons/sophia.ananiadou' target='_blank'>Sophia Ananiadou<sup>1,2,4</sup></a>&emsp;
 </div>
 <div>
