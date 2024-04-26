@@ -45,34 +45,27 @@ GPT-3.5 and Claude-3.
 
 [The <em>MetaAligner</em> Paper](https://arxiv.org/abs/2403.17141)
 
-## MentaLLaMA Model 
+## <em>MetaAligner</em> Model 
 
-We provide 5 model checkpoints evaluated in the MentaLLaMA paper:
+We provide the 9 model checkpoints evaluated in the <em>MetaAligner</em> paper:
 
-- [MentaLLaMA-33B-lora](https://huggingface.co/klyang/MentaLLaMA-33B-lora): This model is fine-tuned based on the Vicuna-33B 
+- MetaAligner-UltraFeedback-([1.1B](https://huggingface.co/klyang/MentaLLaMA-33B-lora), 7B, 13B): This model is fine-tuned based on the Vicuna-33B 
 foundation model and the full IMHI instruction tuning data. The training
 data covers 8 mental health analysis tasks. The model can follow instructions to make accurate mental health analysis
 and generate high-quality explanations for the predictions. Due to the limitation of computational resources,
 we train the MentaLLaMA-33B model with the PeFT technique LoRA, which significantly reduced memory usage.
 
-- [MentaLLaMA-chat-13B](https://huggingface.co/klyang/MentaLLaMA-chat-13B): This model is fine-tuned based on the Meta 
+- MetaAligner-HH-RLHF-([1.1B](https://huggingface.co/MetaAligner/MetaAligner-HH-RLHF-1.1B), [7B](https://huggingface.co/MetaAligner/MetaAligner-HH-RLHF-7B), [13B](https://huggingface.co/MetaAligner/MetaAligner-HH-RLHF-1.1B)): This model is fine-tuned based on the Meta 
 LLaMA2-chat-13B foundation model and the full IMHI instruction tuning data. The training
 data covers 8 mental health analysis tasks. The model can follow instructions to make accurate mental health analysis
 and generate high-quality explanations for the predictions. Due to the model size, the inference
 are relatively slow.
-- [MentaLLaMA-chat-7B](https://huggingface.co/klyang/MentaLLaMA-chat-7B)|
-[MentaLLaMA-chat-7B-hf](https://huggingface.co/klyang/MentaLLaMA-chat-7B-hf): This model is fine-tuned based on the Meta 
-LLaMA2-chat-7B foundation model and the full IMHI instruction tuning data. The training
-data covers 8 mental health analysis tasks. The model can follow instructions to make mental health analysis
-and generate explanations for the predictions.
-- [MentalBART](https://huggingface.co/Tianlin668/MentalBART): This model is fine-tuned based on the BART-large foundation model
+
+- MetaAligner-IMHI-([1.1B](https://huggingface.co/klyang/MentaLLaMA-33B-lora), 7B, 13B): This model is fine-tuned based on the BART-large foundation model
 and the full IMHI-completion data. The training data covers 8 mental health analysis tasks. The model cannot
 follow instructions, but can make mental health analysis and generate explanations in a completion-based manner.
 The smaller size of this model allows faster inference and easier deployment.
-- [MentalT5](https://huggingface.co/Tianlin668/MentalT5): This model is fine-tuned based on the T5-large foundation model
-and the full IMHI-completion data. The model cannot
-follow instructions, but can make mental health analysis and generate explanations in a completion-based manner.
-The smaller size of this model allows faster inference and easier deployment.
+
 
 You can use the MentaLLaMA models in your Python project with the Hugging Face Transformers library. 
 Here is a simple example of how to load the fully fine-tuned model:
