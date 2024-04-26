@@ -28,7 +28,7 @@ Alignment of Language Models </h1>
 ![](https://black.readthedocs.io/en/stable/_static/license.svg)
 
 ## News
-📢 *Mar. 2, 2024* Full release of the test data for the IMHI benchmark.
+📢 *Apr. 26, 2024* Release part of the <em>MetaAligner</em> models.
 
 ## Introduction
 This project presents our efforts towards effective and generalizable multi-objective
@@ -50,7 +50,7 @@ GPT-3.5 and Claude-3.
 
 We provide the 9 model checkpoints evaluated in the <em>MetaAligner</em> paper:
 
-- MetaAligner-UltraFeedback-([1.1B](https://huggingface.co/klyang/MentaLLaMA-33B-lora), 7B, 13B): This model is fine-tuned based on the Vicuna-33B 
+- MetaAligner-UltraFeedback-([1.1B](), 7B, 13B): This model is fine-tuned based on the Vicuna-33B 
 foundation model and the full IMHI instruction tuning data. The training
 data covers 8 mental health analysis tasks. The model can follow instructions to make accurate mental health analysis
 and generate high-quality explanations for the predictions. Due to the limitation of computational resources,
@@ -62,7 +62,7 @@ data covers 8 mental health analysis tasks. The model can follow instructions to
 and generate high-quality explanations for the predictions. Due to the model size, the inference
 are relatively slow.
 
-- MetaAligner-IMHI-([1.1B](https://huggingface.co/klyang/MentaLLaMA-33B-lora), 7B, 13B): This model is fine-tuned based on the BART-large foundation model
+- MetaAligner-IMHI-([7B](https://huggingface.co/MetaAligner/MetaAligner-IMHI-7B), [13B](https://huggingface.co/MetaAligner/MetaAligner-IMHI-13B)): This model is fine-tuned based on the BART-large foundation model
 and the full IMHI-completion data. The training data covers 8 mental health analysis tasks. The model cannot
 follow instructions, but can make mental health analysis and generate explanations in a completion-based manner.
 The smaller size of this model allows faster inference and easier deployment.
