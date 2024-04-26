@@ -29,48 +29,21 @@ Alignment of Language Models </h1>
 ## News
 📢 *Mar. 2, 2024* Full release of the test data for the IMHI benchmark.
 
-## Ethical Considerations
-
-This repository and its contents are provided for **non-clinical research only**
-. None of the material constitutes actual diagnosis or advice, and help-seeker should get assistance
-from professional psychiatrists or clinical practitioners. No warranties, express or implied, are offered regarding the accuracy
-, completeness, or utility of the predictions and explanations. The authors and contributors are not
-responsible for any errors, omissions, or any consequences arising from the use 
-of the information herein. Users should exercise their own judgment and consult
-professionals before making any clinical-related decisions. The use
-of the software and information contained in this repository is entirely at the 
-user's own risk.
-
-The raw datasets collected to build our IMHI dataset are from public
-social media platforms such as Reddit and Twitter, and we strictly
-follow the privacy protocols and ethical principles to protect
-user privacy and guarantee that anonymity is properly applied in
-all the mental health-related texts. In addition, to minimize misuse,
-all examples provided in our paper are paraphrased and obfuscated
-utilizing the moderate disguising scheme.
-
-In addition, recent studies have indicated LLMs may introduce some potential
-bias, such as gender gaps. Meanwhile, some incorrect prediction results, inappropriate explanations, and over-generalization
-also illustrate the potential risks of current LLMs. Therefore, there
-are still many challenges in applying the model to real-scenario
-mental health monitoring systems.
-
-*By using or accessing the information in this repository, you agree to indemnify, defend, and hold harmless the authors, contributors, and any affiliated organizations or persons from any and all claims or damages.*
-
 ## Introduction
+This project presents our efforts towards effective and generalizable multi-objective
+alignment of Large Language Models (LLMs).
+Through this work, we make three main contributions: (1) we propose <em>MetaAligner</em>, the first policy-agnostic 
+method for multi-objective preference alignment. It performs multi-objective alignment efficiently, without tuning the 
+policy models or accessing their parameters. Experimental results show that <em>MetaAligner</em> outperforms previous 
+alignment methods and higher stability; (2) we utilize <em>MetaAligner</em> to exert zero-shot preference alignment for
+unseen objectives. To our knowledge, this work marks the first attempt at generalizable multi-objective preference 
+alignment. Experimental results show that <em>MetaAligner</em> can simultaneously perform effective alignment for 6 
+unseen objectives while maintaining performance on aligned objectives; (3) We examine <em>MetaAligner</em> on 3 
+preference alignment datasets. Experimental results show that <em>MetaAligner</em> improves win rates on multiple 
+objectives across 10 policy models, substantially enhancing responses of state-of-the-art foundation models such as 
+GPT-3.5 and Claude-3.
 
-This project presents our efforts towards interpretable mental health analysis
-with large language models (LLMs). In early works we comprehensively evaluate the zero-shot/few-shot 
-performances of the latest LLMs such as ChatGPT and GPT-4 on generating explanations
-for mental health analysis. Based on the findings, we build the Interpretable Mental Health Instruction (IMHI)
-dataset with 105K instruction samples, the first multi-task and multi-source instruction-tuning dataset for interpretable mental
-health analysis on social media. Based on the IMHI dataset, We propose MentaLLaMA, the first open-source instruction-following LLMs for interpretable mental
-health analysis. MentaLLaMA can perform mental health
-analysis on social media data and generate high-quality explanations for its predictions.
-We also introduce the first holistic evaluation benchmark for interpretable mental health analysis with 19K test samples,
-which covers 8 tasks and 10 test sets. Our contributions are presented in these 2 papers:
-
-[The MentaLLaMA Paper](https://arxiv.org/abs/2309.13567) | [The Evaluation Paper](https://arxiv.org/abs/2304.03347)
+[The <em>MetaAligner</em> Paper](https://arxiv.org/abs/2403.17141)
 
 ## MentaLLaMA Model 
 
@@ -333,6 +306,46 @@ cd src
 python IMHI.py --model_path MODEL_PATH --batch_size 8 --model_output_path OUTPUT_PATH --test_dataset expert --llama --cuda
 ```
 
+## Ethics and Impacts
+
+### Broader Impacts
+
+In this work, <em>MetaAligner</em> provides an effective and model-agnostic method for generalizable and expandable 
+alignment of LLM outputs with multiple human expectations. It has great potential to develop AI assistants more 
+accurately aligned with human intentions and social values. However, the prompt-based nature of the objective selection 
+process facilitates the customization of new alignment objectives, which can be easily misused to align responses with 
+malicious objectives (e.g. sexism, racism, suicide ideation) via adjusting the objective descriptions and utilizing the 
+in-context learning ability of <em>MetaAligner</em>. These actions can lead to harmful outputs from <em>MetaAligner</em>
+. As the authors of <em>MetaAligner</em>, we are dedicated to developing safe and fair AI technology to benefit the 
+common welfare of our society. We condemn any malicious use of <em>MetaAligner</em> and advocate for its responsible 
+and ethical applications. In addition, as <em>MetaAligner</em> performs alignment in a plug-and-play manner on top of 
+the policy models, deployment of this technology can increase the overall inference cost of AI assistants and carbon 
+emissions. These disadvantages can affect the long-term goals of developing
+[green AI systems](https://towardsdatascience.com/green-ai-methods-and-solutions-to-improve-ai-sustainability-861d69dec658)
+and 
+[equitable access to AI](https://tappstr.medium.com/equitable-access-to-ai-bridging-the-digital-divide-for-inclusive-progress-b9c167fcee3)
+to benefit all of humanity.
+
+### Safeguards
+This released codes, data, and <em>MetaAligner</em> models are provided for research only. None of the material 
+constitutes actual diagnosis or advice, and help-seekers should get assistance from professional psychiatrists or 
+clinical practitioners. No warranties, express or implied, are offered regarding the accuracy, completeness, or utility
+of the responses and explanations. The authors and contributors are not responsible for any errors, omissions, or any 
+consequences arising from the use of the information herein. Users should exercise their own judgment and consult 
+professionals before making any clinical-related decisions. The use of the software and information contained in this 
+paper is entirely at the user's own risk.
+
+The collected queries to build our IMHI preference dataset are from the publicly available IMHI dataset
+, and we strictly follow the privacy protocols and ethical principles to protect user privacy and guarantee that 
+anonymity is properly applied in all the mental health-related texts. In addition, to minimize misuse, all examples 
+provided in our paper are paraphrased and obfuscated utilizing the moderate disguising scheme.
+
+In addition, recent studies have indicated LLMs may introduce some potential bias, such as gender gaps. Meanwhile, 
+some incorrect prediction results, inappropriate explanations, and over-generalization also illustrate the potential 
+risks of current LLMs. Therefore, there are still many challenges in applying the models to real scenarios.
+
+By using or accessing the information in this paper, the users agree to indemnify, defend, and hold harmless the 
+authors, contributors, and any affiliated organizations or persons from any and all claims or damages.
 
 ## Citation
 If you use the human annotations or analysis in the evaluation paper, please cite:
