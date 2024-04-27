@@ -14,7 +14,7 @@ Alignment of Language Models </h1>
 <div align="left">
     <sup>1</sup>National Centre for Text Mining&emsp;
     <sup>2</sup>The University of Manchester&emsp;
-    <sup>3</sup>The Fin AI
+    <sup>3</sup>The Fin AI&emsp;
     <sup>4</sup>Artificial Intelligence Research Center, AIST
 </div>
 
