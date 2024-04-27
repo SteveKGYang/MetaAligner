@@ -59,11 +59,11 @@ def make_aligner_query(aligner_name, queries, responses, aspects):
     return aligner_queries
 
 
-def generate_response(model, tokenizer, query_data, response_data, device, batch_size, aspects):
+def generate_response(aligner_name, model, tokenizer, query_data, response_data, device, batch_size, aspects):
     model.to(device)
 
     aligned_responses = []
-    aligner_queries = make_aligner_query(query_data, response_data, aspects)
+    aligner_queries = make_aligner_query(aligner_name, query_data, response_data, aspects)
 
     for i in range(0, len(aligner_queries), batch_size):
         batch_data = aligner_queries[i: min(i + batch_size, len(aligner_queries))]
@@ -115,8 +115,8 @@ def main(aligner_path: str, model_output_path: str, batch_size: int, data_dir: s
     for aspect in aspects:
         assert aspect in all_aspects[aligner_name].keys()
 
-    query_data, goldens, response_data = load_instruction_test_data(aligner_name, data_dir, aligned_model)
-    aligned_responses = generate_response(model, tokenizer, query_data, response_data, device, batch_size, aspects)
+    query_data, goldens, response_data = load_instruction_test_data(data_dir, aligned_model)
+    aligned_responses = generate_response(aligner_name, model, tokenizer, query_data, response_data, device, batch_size, aspects)
     save_output(query_data, aligned_responses, response_data, goldens, model_output_path, aligned_model)
     print('Done!')
 
