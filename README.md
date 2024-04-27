@@ -53,7 +53,7 @@ are fine-tuned on certain objectives, you can always extend their capability to 
 descriptions in the prompts.
 
 ### Model Checkpoints
-- MetaAligner-UltraFeedback-([1.1B](https://huggingface.co/MetaAligner/MetaAligner-UltraFeedback-1.1B), [7B](https://huggingface.co/MetaAligner/MetaAligner-HH-RLHF-7B), [13B](https://huggingface.co/MetaAligner/MetaAligner-HH-RLHF-13B)): 
+- MetaAligner-UltraFeedback-([1.1B](https://huggingface.co/MetaAligner/MetaAligner-UltraFeedback-1.1B), [7B](https://huggingface.co/MetaAligner/MetaAligner-UltraFeedback-7B), [13B](https://huggingface.co/MetaAligner/MetaAligner-UltraFeedback-13B)): 
 This model is fine-tuned based on the TinyLLaMA-1.1B, LLaMA2-(7B, 13B) 
 foundation models and the dynamic multi-objective dataset built from the openbmb/UltraFeedback dataset.
 The model can align responses of a general AI assistant considering a single-turn query, but the queries include
