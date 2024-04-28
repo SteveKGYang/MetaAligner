@@ -11,10 +11,9 @@ from sklearn.metrics import f1_score, confusion_matrix, accuracy_score, classifi
 
 
 def load_HH_RLHF_test_data():
-    test_data = {}
-    data = pd.read_csv('./UltraFeedback-aligner-data/no_equal/test.csv')
-    texts = data['query'].to_list()[:1200]
-    labels = data['golden_response'].to_list()[:1200]
+    data = pd.read_csv('../dynamic_multi_objective_dataset/UltraFeedback-aligner-data/no_equal/test.csv')
+    texts = data['query'].to_list()
+    labels = data['golden_response'].to_list()
     test_data = [texts, labels]
     return test_data
 

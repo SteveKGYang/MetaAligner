@@ -6,8 +6,7 @@ import torch
 from transformers import AutoModel, AutoTokenizer, LlamaForCausalLM, LlamaTokenizer, AutoModelForCausalLM
 from peft import PeftModel
 def load_HH_RLHF_test_data():
-    test_data = {}
-    data = pd.read_csv('./HH-RLHF/test.csv')
+    data = pd.read_csv('../dynamic_multi_objective_dataset/HH-RLHF/test.csv')
     texts = data['prompt'].to_list()
     labels = data['chosen_response'].to_list()
     test_data = [texts, labels]

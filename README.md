@@ -126,16 +126,6 @@ For example, one inference of MetaAligner-HH-RLHF-7B on the above codes has the 
 I’m glad you think so.  But I should let you know that intentionally damaging someone's reputation is not always legal or ethical.  It's important to remember that everyone has the right to their own reputation, and it's not okay to try to harm someone just because you don't like them.  It's important to treat others with respect and kindness, even if you don't get along with them.
 ```
 
-We also provide an inference script in Python to facilitate batch inference. Specifically, use the following commands to
-start a batch inference process. We use MetaAligner-HH-RLHF-1.1B, and Claude-3 generated sample outputs from "./samples"
-as an example:
-```
-cd inference
-python aligner_inference.py --aligner_path MetaAligner/MetaAligner-HH-RLHF-1.1B --data_dir ../samples/HH-RLHF_model_output --aligned_model Claude-3 --model_output_path MetaAligner-HH-RLHF-1.1B_for_allaspects --cuda --batch_size 16 --llama --aspects harmlessness,helpfulness,humour
-```
-You can easily incorporate new objectives by customizing new objective descriptions in the objective set and include the keys
-in the "aspects" argument.
-
 ## The Dynamic Multi-objective Dataset
 
 ### HH-RLHF
@@ -195,124 +185,40 @@ better understanding from <em>MetaAligner</em>. We define the objectives as foll
 Our training data will be released soon...
 
 ## Model Evaluation
-
 ### Response Generation
-To evaluate your trained model on the IMHI benchmark, first load your model and generate responses for all
-test items. We use the Hugging Face Transformers library to load the model. For LLaMA-based models, you can
-generate the responses with the following commands:
+As <em>MetaAligner</em> performs alignment in a plug-and-play manner, we can decouple the response generation process 
+from the alignment process. We provide some samples of our generated responses from various policy models in "./samples"
+directory. You can perform response generation for your own selected policy models using our provided scripts, based on the
+Transformers package. Specifically,
+for generating on HH-RLHF dataset, run the following commands. We use LLaMA2-Chat-70B as an example:
 ```
-cd src
-python IMHI.py --model_path MODEL_PATH --batch_size 8 --model_output_path OUTPUT_PATH --test_dataset IMHI --llama --cuda
+cd inference
+python HH-RLHF-generate.py --model_path meta-llama/Llama-2-70b-chat-hf --model_output_path llama2-chat-70B --batch_size 32 --llama --cuda
 ```
-`MODEL_PATH` and `OUTPUT_PATH` denote the model save path and the save path for generated responses. 
-All generated responses will be put under `../model_output`. Some generated examples are shown in
-```
-./examples/response_generation_examples
-```
-You can also evaluate with the IMHI-completion
-test set with the following commands:
-```
-cd src
-python IMHI.py --model_path MODEL_PATH --batch_size 8 --model_output_path OUTPUT_PATH --test_dataset IMHI-completion --llama --cuda
-```
-You can also load models that are not based on LLaMA by removing the `--llama` argument.
-In the generated examples, the `goldens` row denotes the reference explanations and the `generated_text`
-row denotes the generated responses from your model.
+The outputs will be placed at "../HH-RLHF_model_output/".
 
-### Correctness Evaluation
-The first evaluation metric for our IMHI benchmark is to evaluate the classification correctness of the model
-generations. If your model can generate very regular responses, a rule-based classifier can do well to assign
-a label to each response. We provide a rule-based classifier in `IMHI.py` and you can use it during the response
-generation process by adding the argument: `--rule_calculate` to your command. The classifier requires
-the following template:
+For generating on UltraFeedback dataset, run the following commands. We use LLaMA2-Chat-70B as an example:
+```
+python UltraFeedback-generate.py --model_path meta-llama/Llama-2-70b-chat-hf --model_output_path llama2-chat-70B --batch_size 32 --llama --cuda
+```
+The outputs will be placed at "../UltraFeedback_model_output/".
 
+For generating on IMHI dataset, run the following commands. We use LLaMA2-Chat-70B as an example:
 ```
-[label] Reasoning: [explanation]
+python IMHI-generate.py --model_path meta-llama/Llama-2-70b-chat-hf --model_output_path llama2-chat-70B --batch_size 32 --llama --cuda
 ```
+The outputs will be placed at "../IMHI_model_output/".
 
-However, as most LLMs are trained to generate diverse responses, a rule-based label classifier is impractical.
-For example, MentaLLaMA can have the following response for an SAD query:
+### Alignment
+We provide an inference script in Python to facilitate batch inference. Specifically, use the following commands to
+start a batch inference process. We use MetaAligner-HH-RLHF-1.1B, and Claude-3 generated sample outputs from "./samples"
+as an example:
 ```
-This post indicates that the poster's sister has tested positive for ovarian cancer and that the family is devastated. This suggests that the cause of stress in this situation is health issues, specifically the sister's diagnosis of ovarian cancer. The post does not mention any other potential stress causes, making health issues the most appropriate label in this case.
+cd inference
+python aligner_inference.py --aligner_path MetaAligner/MetaAligner-HH-RLHF-1.1B --data_dir ../samples/HH-RLHF_model_output --aligned_model Claude-3 --model_output_path MetaAligner-HH-RLHF-1.1B_for_allaspects --cuda --batch_size 16 --llama --aspects harmlessness,helpfulness,humour
 ```
-To solve this problem, in our [MentaLLaMA paper](https://arxiv.org/abs/2309.13567) we train 10 neural 
-network classifiers based on [MentalBERT](https://arxiv.org/abs/2110.15621), one for each collected raw dataset. The classifiers are trained to
-assign a classification label given the explanation. We release these 10 classifiers to facilitate future
-evaluations on IMHI benchmark.
-
-All trained models achieve over 95% accuracy on the IMHI test data. Before you assign the labels, make sure 
-you have transferred your output files in the format of `/exmaples/response_generation_examples` and named
-as `DATASET.csv`. Put all the output files you want to label under the same DATA_PATH dir. Then download 
-the corresponding classifier models from the following links:
-
-The models download links: [CAMS](https://huggingface.co/Tianlin668/CAMS), [CLP](https://huggingface.co/Tianlin668/CLP), [DR](https://huggingface.co/Tianlin668/DR),
-[dreaddit](https://huggingface.co/Tianlin668/dreaddit), [Irf](https://huggingface.co/Tianlin668/Irf), [loneliness](https://huggingface.co/Tianlin668/loneliness), [MultiWD](https://huggingface.co/Tianlin668/MultiWD),
-[SAD](https://huggingface.co/Tianlin668/SAD), [swmh](https://huggingface.co/Tianlin668/swmh), [t-sid](https://huggingface.co/Tianlin668/t-sid)
-
-Put all downloaded models under a MODEL_PATH dir and name each model with its dataset. For example, the model
-for DR dataset should be put under `/MODEL_PATH/DR`. Now you can obtain the labels using these models with the following commands:
-```
-cd src
-python label_inference.py --model_path MODEL_PATH --data_path DATA_PATH --data_output_path OUTPUT_PATH --cuda
-```
-where `MODEL_PATH`, `DATA_PATH` denote your specified model and data dirs, and `OUTPUT_PATH` denotes your
-output path. After processing, the output files should have the format as the examples in `/examples/label_data_examples`.
-If you hope to calculate the metrics such as weight-F1 score and accuracy, add the argument `--calculate` to
-the above command.
-### Explanation Quality Evaluation
-The second evaluation metric for the IMHI benchmark is to evaluate the quality of the generated explanations.
-The results in our 
-[evaluation paper](https://arxiv.org/abs/2304.03347) show that [BART-score](https://arxiv.org/abs/2106.11520) is
-moderately correlated with human annotations in 4 human evaluation aspects, and outperforms other automatic evaluation metrics. Therefore,
-we utilize BART-score to evaluate the quality of the generated explanations. Specifically, you should first
-generate responses using the `IMHI.py` script and obtain the response dir as in `examples/response_generation_examples`.
-Firstly, download the [BART-score](https://github.com/neulab/BARTScore) directory and put it under `/src`, then
-download the [BART-score checkpoint](https://drive.google.com/file/d/1_7JfF7KOInb7ZrxKHIigTMR4ChVET01m/view?usp=sharing).
-Then score your responses with BART-score using the following commands:
-```
-cd src
-python score.py --gen_dir_name DIR_NAME --score_method bart_score --cuda
-```
-`DIR_NAME` denotes the dir name of your geenrated responses and should be put under `../model_output`. 
-We also provide other scoring methods. You can change `--score_method` to 'GPT3_score', 'bert_score', 'bleu', 'rouge'
-to use these metrics. For [GPT-score](https://github.com/jinlanfu/GPTScore), you need to first download
-the project and put it under `/src`.
-
-## Human Annotations
-
-We release our human annotations on AI-generated explanations to facilitate future research on aligning automatic evaluation
-tools for interpretable mental health analysis. Based on these human evaluation results, we tested various existing
-automatic evaluation metrics on correlation with human preferences. The results in our 
-[evaluation paper](https://arxiv.org/abs/2304.03347) show that 
-BART-score is moderately correlated with human annotations in all 4 aspects.
-
-### Quality Evaluation
-In our [evaluation paper](https://arxiv.org/abs/2304.03347), we manually labeled a subset of the AIGC results for the DR dataset in 4 aspects:
-fluency, completeness, reliability, and overall. The annotations are released in this dir:
-```
-/human_evaluation/DR_annotation
-```
-where we labeled 163 ChatGPT-generated explanations for the depression detection dataset DR. The file `chatgpt_data.csv`
-includes 121 explanations that correctly classified by ChatGPT. `chatgpt_false_data.csv`
-includes 42 explanations that falsely classified by ChatGPT. We also include 121 explanations that correctly 
-classified by InstructionGPT-3 in `gpt3_data.csv`.
-
-### Expert-written Golden Explanations
-In our [MentaLLaMA paper](https://arxiv.org/abs/2309.13567), we invited one domain expert major in quantitative psychology
-to write an explanation for 350 selected posts (35 posts for each raw dataset). The golden set is used to accurately
-evaluate the explanation-generation ability of LLMs in an automatic manner. To facilitate future research, we
-release the expert-written explanations for the following datasets: DR, dreaddit, SWMH, T-SID, SAD, CAMS, 
-loneliness, MultiWD, and IRF (35 samples each). The data is released in this dir:
-```
-/human_evaluation/test_instruction_expert
-```
-The expert-written explanations are processed to follow the same format as other test datasets to facilitate
-model evaluations. You can test your model on the expert-written golden explanations with similar commands
-as in response generation. For example, you can test LLaMA-based models as follows:
-```
-cd src
-python IMHI.py --model_path MODEL_PATH --batch_size 8 --model_output_path OUTPUT_PATH --test_dataset expert --llama --cuda
-```
+You can easily incorporate new objectives by customizing new objective descriptions in the objective set and include the keys
+in the "aspects" argument.
 
 ## Ethics and Impacts
 
