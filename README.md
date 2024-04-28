@@ -220,10 +220,45 @@ python aligner_inference.py --aligner_path MetaAligner/MetaAligner-HH-RLHF-1.1B 
 You can easily incorporate new objectives by customizing new objective descriptions in the objective set and include the keys
 in the "aspects" argument.
 
+### GPT-4 Evaluation
+We will release our script for GPT-4 evaluation here.
+
+## Model Training
+The <em>MetaAligner</em> is trained in a SFT manner with the [FastChat](https://github.com/lm-sys/FastChat) framework.
+If you hope to re-train the model, set up the FastChat framework according to their guidelines and fine-tune the model
+with new data. The following command is an example of fine-tuning MetaAligner-UltraFeedback-13B:
+```
+torchrun --nproc_per_node=4 --master_port=20001 fastchat/train/train_mem.py \
+    --model_name_or_path meta-llama/Llama-2-13b-hf \
+    --data_path ./UltraFeedback-aligner-data/no_equal/train.json \
+    --bf16 True \
+    --output_dir UltraFeedback-aligner-13B \
+    --num_train_epochs 2 \
+    --per_device_train_batch_size 2 \
+    --per_device_eval_batch_size 2 \
+    --gradient_accumulation_steps 64 \
+    --evaluation_strategy "steps" \
+    --eval_steps 49 \
+    --eval_data_path UltraFeedback-aligner-data/no_equal/val.json \
+    --save_strategy "steps" \
+    --save_steps 49 \
+    --save_total_limit 20 \
+    --learning_rate 1e-5 \
+    --weight_decay 1e-5 \
+    --warmup_ratio 0.05 \
+    --lr_scheduler_type "cosine" \
+    --logging_steps 1 \
+    --fsdp "full_shard auto_wrap" \
+    --fsdp_transformer_layer_cls_to_wrap 'LlamaDecoderLayer' \
+    --tf32 True \
+    --model_max_length 4096 \
+    --gradient_checkpointing True \
+    --lazy_preprocess True
+```
+We ran the above codes on 4 x Nvidia A100 80GB GPUs. You can modify the settings to fit your won needs.
+
 ## Ethics and Impacts
-
 ### Broader Impacts
-
 In this work, <em>MetaAligner</em> provides an effective and model-agnostic method for generalizable and expandable 
 alignment of LLM outputs with multiple human expectations. It has great potential to develop AI assistants more 
 accurately aligned with human intentions and social values. However, the prompt-based nature of the objective selection 
