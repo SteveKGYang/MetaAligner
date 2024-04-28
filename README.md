@@ -262,28 +262,17 @@ By using or accessing the information in this paper, the users agree to indemnif
 authors, contributors, and any affiliated organizations or persons from any and all claims or damages.
 
 ## Citation
-If you use the human annotations or analysis in the evaluation paper, please cite:
+If you use <em>MetaAligner</em> in your work, please cite:
 
 ```
-@inproceedings{yang2023towards,
-  title={Towards interpretable mental health analysis with large language models},
-  author={Yang, Kailai and Ji, Shaoxiong and Zhang, Tianlin and Xie, Qianqian and Kuang, Ziyan and Ananiadou, Sophia},
-  booktitle={Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
-  pages={6056--6077},
-  year={2023}
-}
-```
-
-If you use MentaLLaMA in your work, please cite:
-```
-@article{yang2023mentalllama,
-  title={MentalLLaMA: Interpretable Mental Health Analysis on Social Media with Large Language Models},
-  author={Yang, Kailai and Zhang, Tianlin and Kuang, Ziyan and Xie, Qianqian and Ananiadou, Sophia},
-  journal={arXiv preprint arXiv:2309.13567},
-  year={2023}
+@article{yang2024metaaligner,
+  title={MetaAligner: Conditional Weak-to-Strong Correction for Generalizable Multi-Objective Alignment of Language Models},
+  author={Yang, Kailai and Liu, Zhiwei and Xie, Qianqian and Zhang, Tianlin and Song, Nirui and Huang, Jimin and Kuang, Ziyan and Ananiadou, Sophia},
+  journal={arXiv preprint arXiv:2403.17141},
+  year={2024}
 }
 ```
 
 ## License
 
-MentaLLaMA is licensed under [MIT]. Please find more details in the [MIT](LICENSE) file.
+<em>MetaAligner</em> is licensed under [MIT]. Please find more details in the [MIT](LICENSE) file.
