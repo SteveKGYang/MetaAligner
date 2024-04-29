@@ -4,12 +4,24 @@ import pandas as pd
 import os
 import time
 
-client = OpenAI(api_key='')
+from dataclasses import dataclass, field
+from typing import Optional
+from transformers import HfArgumentParser
+
+@dataclass
+class ScriptArguments:
+    api_key: Optional[str] = field(default='')
+    output_file: Optional[str] = field(default='')
+    target_model: Optional[str] = field(default='gpt-3.5-turbo')
+
+parser = HfArgumentParser(ScriptArguments)
+script_args = parser.parse_args_into_dataclasses()[0]
+
+client = OpenAI(api_key=script_args.api_key)
 openai_model = 'gpt-4-turbo-preview'
-#openai_model = 'gpt-3.5-turbo-0125'
-output_file = 'object_wise_alignment_UltraFeedback'
+output_file = script_args.output_file
 target_model = 'gpt-3.5-turbo'
-n = 300
+n = -1
 
 prompt = 'You will be presented with one query and a response to this query.' \
          'QUERY: {query} \n | RESPONSE: {output}" \

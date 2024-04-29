@@ -232,10 +232,17 @@ in the "aspects" argument.
 
 ### GPT-4 Evaluation
 We use GPT-4 as oracle to evaluate the aligned performance of our models. The scripts are provided in "./evaluation".
-For evaluating <em>MetaAligner</em> performance on UltraFeedback, run the following commands:
+For evaluating <em>MetaAligner</em> performance, run the following commands:
 ```bash
 cd evaluation
 python UltraFeedback_GPT4_score.py --api_key YOUR_OPENAI_API_KEY --output_file MODEL_OUTPUT_FILE --objective EVALUATION_OBJECTIVE --target ORIGIN_OR_ALIGNED_OUTPUT
+python HH-RLHF_GPT4_score.py --api_key YOUR_OPENAI_API_KEY --output_file MODEL_OUTPUT_FILE --objective EVALUATION_OBJECTIVE --target ORIGIN_OR_ALIGNED_OUTPUT
+python IMHI_GPT4_score.py --api_key YOUR_OPENAI_API_KEY --output_file MODEL_OUTPUT_FILE --objective EVALUATION_OBJECTIVE --target ORIGIN_OR_ALIGNED_OUTPUT
+```
+In evaluating the objective-wise alignment ability of <em>MetaAligner</em>, we also used GPT-4 as reward models to rate
+the UltraFeedback outputs ranging from 0 to 10. To reproduce the results, run the following commands:
+```bash
+python UltraFeedback_GPT4_rate.py --api_key YOUR_OPENAI_API_KEY --output_file MODEL_OUTPUT_FILE --objective EVALUATION_OBJECTIVE --target_model THE_TARGET_POLICY_MODEL
 ```
 
 ## Model Training
