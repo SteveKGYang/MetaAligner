@@ -23,6 +23,7 @@ Alignment of Language Models </h1>
     <img src='https://i.postimg.cc/nc2Jy6FN/uom.png' alt='UoM University Logo' height='85px'>
     <img src='https://i.postimg.cc/R0Y0n5xH/fin-ai.jpg' alt='Fin AI Logo' height='85px'>
     <img src='https://i.postimg.cc/SNpxVKwg/airc-logo.png' alt='airc Logo' height='85px'>
+    <img src='https://i.postimg.cc/mkjVYKMY/aist.png' alt='aist Logo' height='85px'>
 </div>
 
 ![](https://black.readthedocs.io/en/stable/_static/license.svg)
