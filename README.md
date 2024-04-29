@@ -33,7 +33,7 @@ Alignment of Language Models </h1>
 ## Contents
 - [Introduction](#introduction)
 - [Model Weights](#metaaligner-models )
-- [The Dynamic Multi Objective Dataset](#the-dynamic-multi-objective-dataset)
+- [The Dynamic Multi-objective Dataset](#the-dynamic-multi-objective-dataset)
 - [Model Evaluation](#model-evaluation)
 - [Model Training](#model-training)
 - [Baseline Model](#baseline-model)
@@ -231,7 +231,12 @@ You can easily incorporate new objectives by customizing new objective descripti
 in the "aspects" argument.
 
 ### GPT-4 Evaluation
-We will release our script for GPT-4 evaluation here.
+We use GPT-4 as oracle to evaluate the aligned performance of our models. The scripts are provided in "./evaluation".
+For evaluating <em>MetaAligner</em> performance on UltraFeedback, run the following commands:
+```bash
+cd evaluation
+python UltraFeedback_GPT4_score.py --api_key YOUR_OPENAI_API_KEY --output_file MODEL_OUTPUT_FILE --objective EVALUATION_OBJECTIVE --target ORIGIN_OR_ALIGNED_OUTPUT
+```
 
 ## Model Training
 The <em>MetaAligner</em> is trained in a SFT manner with the [FastChat](https://github.com/lm-sys/FastChat) framework.
