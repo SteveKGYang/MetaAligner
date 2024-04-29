@@ -257,6 +257,88 @@ torchrun --nproc_per_node=4 --master_port=20001 fastchat/train/train_mem.py \
 ```
 We ran the above codes on 4 x Nvidia A100 80GB GPUs. You can modify the settings to fit your won needs.
 
+## Baseline Model
+We compare the performance of <em>MetaAligner</em> with 3 baseline methods: MORLHF, MODPO, and SFT-based method. We provide
+details about their implementations to facilitate replication of our results.
+
+### SFT-based Method
+SFT-based method explicitly incorporates the rewards of different objectives into the queries via prompt engineering, and
+learns a mapping between the reward values and the performance in the corresponding responses. Then objective-wise 
+performance can be controlled via modifying the reward values.
+Specifically, we implement the stage 1 of the [Rewards-in-Context](https://github.com/YangRui2015/RiC/tree/main) method
+as baseline method for SFT. We firstly build the training datasets via the following commands:
+```
+cd baseline_models/SFT
+python HH_RLHF_make_sft_data.py
+python UltraFeedback_make_sft_data.py
+```
+Note that "HH_RLHF_make_sft_data.py" script requires the "./HH-RLHF" directory. The above codes produce the training
+data for SFT. Move the produced data to the FastChat directory and train based on the LLaMA2-Chat-7B model. For HH-RLHF, 
+you can use the following commands:
+```
+torchrun --nproc_per_node=2 --master_port=20001 fastchat/train/train_mem.py \
+    --model_name_or_path ./llama2-chat-7B \
+    --data_path HH-RLHF-sft-data/train.json \
+    --bf16 True \
+    --output_dir HH-RLHF-sft-model-7B \
+    --num_train_epochs 3 \
+    --per_device_train_batch_size 4 \
+    --per_device_eval_batch_size 4 \
+    --gradient_accumulation_steps 64 \
+    --evaluation_strategy "steps" \
+    --eval_steps 111 \
+    --eval_data_path HH-RLHF-sft-data/val.json \
+    --save_strategy "steps" \
+    --save_steps 111 \
+    --save_total_limit 20 \
+    --learning_rate 1e-5 \
+    --weight_decay 1e-5 \
+    --warmup_ratio 0.05 \
+    --lr_scheduler_type "cosine" \
+    --logging_steps 1 \
+    --fsdp "full_shard auto_wrap" \
+    --fsdp_transformer_layer_cls_to_wrap 'LlamaDecoderLayer' \
+    --tf32 True \
+    --model_max_length 4096 \
+    --gradient_checkpointing True \
+    --lazy_preprocess True
+```
+For UltraFeedback, train with the following command:
+```
+torchrun --nproc_per_node=2 --master_port=20001 fastchat/train/train_mem.py \
+    --model_name_or_path ./llama2-chat-7B \
+    --data_path UltraFeedback-sft-data/train.json \
+    --bf16 True \
+    --output_dir UltraFeedback-sft-model-7B \
+    --num_train_epochs 3 \
+    --per_device_train_batch_size 4 \
+    --per_device_eval_batch_size 4 \
+    --gradient_accumulation_steps 64 \
+    --evaluation_strategy "steps" \
+    --eval_steps 66 \
+    --eval_data_path HH-RLHF-sft-data/val.json \
+    --save_strategy "steps" \
+    --save_steps 66 \
+    --save_total_limit 20 \
+    --learning_rate 1e-5 \
+    --weight_decay 1e-5 \
+    --warmup_ratio 0.05 \
+    --lr_scheduler_type "cosine" \
+    --logging_steps 1 \
+    --fsdp "full_shard auto_wrap" \
+    --fsdp_transformer_layer_cls_to_wrap 'LlamaDecoderLayer' \
+    --tf32 True \
+    --model_max_length 4096 \
+    --gradient_checkpointing True \
+    --lazy_preprocess True
+```
+After training, you can make inference from the test data using the following commands:
+```
+python sft_inference.py --aligner_path HH_RLHF_MODEL_PATH --data_dir ../dynamic_multi_objective_dataset/HH-RLHF/test.csv --model_output_path YOUR_OUTPUT_PATH --batch_size 8 --cuda --llama
+python sft_inference.py --aligner_path ULTRAFEEDBACK_MODEL_PATH --data_dir ./UltraFeedback-sft-data/test.csv --model_output_path YOUR_OUTPUT_PATH --batch_size 8 --cuda --llama
+```
+
+
 ## Ethics and Impacts
 ### Broader Impacts
 In this work, <em>MetaAligner</em> provides an effective and model-agnostic method for generalizable and expandable 
