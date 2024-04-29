@@ -30,6 +30,16 @@ Alignment of Language Models </h1>
 ## News
 📢 *Apr. 26, 2024* Release part of the <em>MetaAligner</em> models.
 
+## Contents
+- [Introduction](#introduction)
+- [Model Weights](#metaaligner-models )
+- [The Dynamic Multi Objective Dataset](#the-dynamic-multi-objective-dataset)
+- [Model Evaluation](#model-evaluation)
+- [Model Training](#model-training)
+- [Baseline Model](#baseline-model)
+- [Ethics and Impacts](#ethics-and-impacts)
+- [Citation](#citation)
+
 ## Introduction
 This project presents our efforts towards effective and generalizable multi-objective
 alignment of Large Language Models (LLMs).
@@ -142,7 +152,7 @@ We thank the authors for sharing these codes with the community.
 
 With the pre-processed data stored in "./HH-RLHF", use the following commands to convert the raw data into a dynamic
 multi-objective dataset:
-```
+```bash
 python HH_RLHF_make_aligner_data.py --save_directory './HH-RLHF-aligner-data' --split 'train'
 python HH_RLHF_make_aligner_data.py --save_directory './HH-RLHF-aligner-data' --split 'test'
 ```
@@ -191,20 +201,20 @@ from the alignment process. We provide some samples of our generated responses f
 directory. You can perform response generation for your own selected policy models using our provided scripts, based on the
 Transformers package. Specifically,
 for generating on HH-RLHF dataset, run the following commands. We use LLaMA2-Chat-70B as an example:
-```
+```bash
 cd inference
 python HH-RLHF-generate.py --model_path meta-llama/Llama-2-70b-chat-hf --model_output_path llama2-chat-70B --batch_size 32 --llama --cuda
 ```
 The outputs will be placed at "../HH-RLHF_model_output/".
 
 For generating on UltraFeedback dataset, run the following commands. We use LLaMA2-Chat-70B as an example:
-```
+```bash
 python UltraFeedback-generate.py --model_path meta-llama/Llama-2-70b-chat-hf --model_output_path llama2-chat-70B --batch_size 32 --llama --cuda
 ```
 The outputs will be placed at "../UltraFeedback_model_output/".
 
 For generating on IMHI dataset, run the following commands. We use LLaMA2-Chat-70B as an example:
-```
+```bash
 python IMHI-generate.py --model_path meta-llama/Llama-2-70b-chat-hf --model_output_path llama2-chat-70B --batch_size 32 --llama --cuda
 ```
 The outputs will be placed at "../IMHI_model_output/".
@@ -227,7 +237,7 @@ We will release our script for GPT-4 evaluation here.
 The <em>MetaAligner</em> is trained in a SFT manner with the [FastChat](https://github.com/lm-sys/FastChat) framework.
 If you hope to re-train the model, set up the FastChat framework according to their guidelines and fine-tune the model
 with new data. The following command is an example of fine-tuning MetaAligner-UltraFeedback-13B:
-```
+```bash
 torchrun --nproc_per_node=4 --master_port=20001 fastchat/train/train_mem.py \
     --model_name_or_path meta-llama/Llama-2-13b-hf \
     --data_path ./UltraFeedback-aligner-data/no_equal/train.json \
@@ -267,7 +277,7 @@ learns a mapping between the reward values and the performance in the correspond
 performance can be controlled via modifying the reward values.
 Specifically, we implement the stage 1 of the [Rewards-in-Context](https://github.com/YangRui2015/RiC/tree/main) method
 as baseline method for SFT. We firstly build the training datasets via the following commands:
-```
+```bash
 cd baseline_models/SFT
 python HH_RLHF_make_sft_data.py
 python UltraFeedback_make_sft_data.py
@@ -275,7 +285,7 @@ python UltraFeedback_make_sft_data.py
 Note that "HH_RLHF_make_sft_data.py" script requires the "./HH-RLHF" directory. The above codes produce the training
 data for SFT. Move the produced data to the FastChat directory and train based on the LLaMA2-Chat-7B model. For HH-RLHF, 
 you can use the following commands:
-```
+```bash
 torchrun --nproc_per_node=2 --master_port=20001 fastchat/train/train_mem.py \
     --model_name_or_path ./llama2-chat-7B \
     --data_path HH-RLHF-sft-data/train.json \
@@ -304,7 +314,7 @@ torchrun --nproc_per_node=2 --master_port=20001 fastchat/train/train_mem.py \
     --lazy_preprocess True
 ```
 For UltraFeedback, train with the following command:
-```
+```bash
 torchrun --nproc_per_node=2 --master_port=20001 fastchat/train/train_mem.py \
     --model_name_or_path ./llama2-chat-7B \
     --data_path UltraFeedback-sft-data/train.json \
@@ -333,7 +343,7 @@ torchrun --nproc_per_node=2 --master_port=20001 fastchat/train/train_mem.py \
     --lazy_preprocess True
 ```
 After training, you can make inference from the test data using the following commands:
-```
+```bash
 python sft_inference.py --aligner_path HH_RLHF_MODEL_PATH --data_dir ../dynamic_multi_objective_dataset/HH-RLHF/test.csv --model_output_path YOUR_OUTPUT_PATH --batch_size 8 --cuda --llama
 python sft_inference.py --aligner_path ULTRAFEEDBACK_MODEL_PATH --data_dir ./UltraFeedback-sft-data/test.csv --model_output_path YOUR_OUTPUT_PATH --batch_size 8 --cuda --llama
 ```
