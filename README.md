@@ -193,7 +193,8 @@ better understanding from <em>MetaAligner</em>. We define the objectives as foll
 |Length | The response should be concise and avoid redundant content.                                    |
 
 ### Training data
-Our training data will be released soon...
+We release the [HH-RLHF-MetaAligner-Data](https://huggingface.co/datasets/MetaAligner/HH-RLHF-MetaAligner-Data)
+training data, which is built from HH-RLHF. More data will be released soon.
 
 ## Model Evaluation
 ### Response Generation
