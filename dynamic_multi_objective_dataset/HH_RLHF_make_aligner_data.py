@@ -10,7 +10,7 @@ import pandas as pd
 
 @dataclass
 class ScriptArguments:
-    split: Optional[str] = field(default='test', metadata={"help": "exp type, 'summary' or 'assistant' "})
+    split: Optional[str] = field(default='train', metadata={"help": "exp type, 'summary' or 'assistant' "})
     save_directory: Optional[str] = field(default='./HH-RLHF-aligner-data')
 
 parser = HfArgumentParser(ScriptArguments)
@@ -78,36 +78,36 @@ for query, cr, rr, c1, r1, c2, r2, c3, r3 in zip(queries, chosen_response, rejec
 
     if len(b_chosen) > 0:
         random.shuffle(b_chosen)
-        query = query_prompt.format(
+        question = query_prompt.format(
         aspects = '; '.join(b_chosen),
         question=query,
         answer=rr
         )
-        item = {'id': id, 'conversations': [{'from': 'human', 'value': query},
+        item = {'id': id, 'conversations': [{'from': 'human', 'value': question},
                                             {'from': 'gpt', 'value': cr}]}
         id += 1
         items.append(item)
 
     if len(b_reject) > 0:
         random.shuffle(b_reject)
-        query = query_prompt.format(
+        question = query_prompt.format(
             aspects='; '.join(b_reject),
             question=query,
             answer=cr
         )
-        item = {'id': id, 'conversations': [{'from': 'human', 'value': query},
+        item = {'id': id, 'conversations': [{'from': 'human', 'value': question},
                                             {'from': 'gpt', 'value': rr}]}
         id += 1
         items.append(item)
 
     if len(equal) > 0:
         random.shuffle(equal)
-        query = equal_prompt.format(
+        question = equal_prompt.format(
             aspects='; '.join(b_reject),
             question=query,
             answer=rr
         )
-        item = {'id': id, 'conversations': [{'from': 'human', 'value': query},
+        item = {'id': id, 'conversations': [{'from': 'human', 'value': question},
                                             {'from': 'gpt', 'value': cr}]}
         id += 1
         equal_items.append(item)
