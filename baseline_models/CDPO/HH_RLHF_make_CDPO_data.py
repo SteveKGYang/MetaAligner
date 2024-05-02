@@ -24,8 +24,7 @@ all_aspects = ['Harmlessness',
                'Humour']
 query_prompt = '<{objective1}>: {reward1}; <{objective2}>: {reward2}; <{objective3}>: {reward3} | {question}'
 
-chosen_queries = []
-reject_queries = []
+p_queries = []
 chosen_responses = []
 reject_responses = []
 
@@ -39,39 +38,32 @@ for query, cr, rr, c1, r1, c2, r2, c3, r3 in zip(queries, chosen_response, rejec
     c_reward = -abs(4.19 - c1)-abs(3.03-c2)-abs(1.58-c3)
     r_reward = -abs(4.19 - r1) - abs(3.03 - r2) - abs(1.58 - r3)
 
-    c_question = query_prompt.format(objective1=all_aspects[0], reward1=str(c1),
-                                       objective2=all_aspects[1], reward2=str(c2),
-                                       objective3=all_aspects[2], reward3=str(c3), question=query)
-    r_question = query_prompt.format(objective1=all_aspects[0], reward1=str(r1),
-                                      objective2=all_aspects[1], reward2=str(r2),
-                                      objective3=all_aspects[2], reward3=str(r3), question=query)
+    question = query_prompt.format(objective1=all_aspects[0], reward1=str(4.19),
+                                       objective2=all_aspects[1], reward2=str(3.03),
+                                       objective3=all_aspects[2], reward3=str(1.58), question=query)
+    p_queries.append(question)
     if c_reward >= r_reward:
-        chosen_queries.append(c_question)
-        reject_queries.append(r_question)
         chosen_responses.append(cr)
         reject_responses.append(rr)
     elif c_reward < r_reward:
-        chosen_queries.append(r_question)
-        reject_queries.append(c_question)
         chosen_responses.append(rr)
         reject_responses.append(cr)
 
     id += 1
 
-random.shuffle(items)
-print(len(chosen_queries))
+print(len(p_queries))
 
 if not os.path.exists('./HH-RLHF-CDPO-data'):
     os.mkdir('./HH-RLHF-CDPO-data')
 
-train_output = {'chosen_queries': chosen_queries[15000:], 'reject_queries': reject_queries[15000:],
+train_output = {'queries': p_queries[15000:],
                 'chosen_responses': chosen_responses[15000:], 'reject_responses': reject_responses[15000:]}
 output = pd.DataFrame(train_output, index=None)
 output.to_csv(os.path.join('HH-RLHF-CDPO-data', 'train.csv'), index=False, escapechar='\\')
 
-val_output = {'chosen_queries': chosen_queries[:15000], 'reject_queries': reject_queries[:15000],
+val_output = {'queries': p_queries[:15000],
                 'chosen_responses': chosen_responses[:15000], 'reject_responses': reject_responses[:15000]}
 output = pd.DataFrame(val_output, index=None)
 output.to_csv(os.path.join('HH-RLHF-CDPO-data', 'val.csv'), index=False, escapechar='\\')
 
-print('Train: {}, val: {}'.format(len(chosen_queries[15000:]), len(chosen_queries[:15000])))
+print('Train: {}, val: {}'.format(len(p_queries[15000:]), len(p_queries[:15000])))
