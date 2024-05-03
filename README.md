@@ -363,10 +363,10 @@ python sft_inference.py --aligner_path ULTRAFEEDBACK_MODEL_PATH --data_dir ./Ult
 ```
 
 ### MODPO
-MODPO aims to extend DPO algorithm to multi-objective alignment scenarios. As are few existing open-sourced replications
+MODPO aims to extend DPO algorithm to multi-objective alignment scenarios. As there are few existing open-sourced replications
 of current MODPO algorithms, we implement the state-of-the-art MPDPO method: [CDPO](https://arxiv.org/abs/2402.19085),
 an algorithm that combines prompt engineering and multi-objective reward determination,
-to compare with <em>MetaAligner</em>. The theory os CDPO is introduced in the paper. Specifically, put the "./HH-RLHF" data
+to compare with <em>MetaAligner</em>. The theory of CDPO is introduced in the paper. Specifically, put the "./HH-RLHF" data
 under the "/baseline_models/CDPO" directory, and produce the training data using the following commands:
 ```bash
 cd ./baseline_models/CDPO
@@ -374,7 +374,7 @@ python HH-RLHF_make_CDPO_data.py
 python UltraFeedback_make_CDPO_data.py
 ```
 The DPO training framework is based on [OpenRLHF](https://github.com/OpenLLMAI/OpenRLHF). Set up the OpenRLHF framework 
-following the instructions in their Github page, and start tyhe training process with the following commands. For UltraFeedback,
+following the instructions in their Github page, and start the training process with the following commands. For UltraFeedback,
 we have:
 ```bash
 deepspeed ./train_cdpo.py --save_path ./UltraFeedback-modpo-model-7B      \
