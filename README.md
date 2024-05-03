@@ -362,6 +362,61 @@ python sft_inference.py --aligner_path HH_RLHF_MODEL_PATH --data_dir ../dynamic_
 python sft_inference.py --aligner_path ULTRAFEEDBACK_MODEL_PATH --data_dir ./UltraFeedback-sft-data/test.csv --model_output_path YOUR_OUTPUT_PATH --batch_size 8 --cuda --llama
 ```
 
+### MODPO
+MODPO aims to extend DPO algorithm to multi-objective alignment scenarios. As are few existing open-sourced replications
+of current MODPO algorithms, we implement the state-of-the-art MPDPO method: [CDPO](https://arxiv.org/abs/2402.19085),
+an algorithm that combines prompt engineering and multi-objective reward determination,
+to compare with <em>MetaAligner</em>. The theory os CDPO is introduced in the paper. Specifically, put the "./HH-RLHF" data
+under the "/baseline_models/CDPO" directory, and produce the training data using the following commands:
+```bash
+cd ./baseline_models/CDPO
+python HH-RLHF_make_CDPO_data.py
+python UltraFeedback_make_CDPO_data.py
+```
+The DPO training framework is based on [OpenRLHF](https://github.com/OpenLLMAI/OpenRLHF). Set up the OpenRLHF framework 
+following the instructions in their Github page, and start tyhe training process with the following commands. For UltraFeedback,
+we have:
+```bash
+deepspeed ./train_cdpo.py --save_path ./UltraFeedback-modpo-model-7B      \
+--save_steps -1      \
+--logging_steps 1      \
+--eval_steps -1      \
+--micro_train_batch_size 2      \
+--pretrain ULTRAFEEDBACK_SFT_MODEL_PATH      \
+--bf16      \
+--max_epochs 1      \
+--max_len 4096      \
+--zero_stage 3      \
+--beta 0.1      \
+--learning_rate 5e-7      \
+--dataset ./UltraFeedback-CDPO-data      \
+--flash_attn      \
+--gradient_checkpointing      \
+--use_wandb YOUR_WANDB_FINGERPRINT
+```
+For HH-RLHF, we have:
+```bash
+deepspeed ./train_cdpo.py --save_path ./HH-RLHF-modpo-model-7B      \
+--save_steps -1      \
+--logging_steps 1      \
+--eval_steps -1      \
+--micro_train_batch_size 2      \
+--pretrain HH-RLHF_SFT_MODEL_PATH      \
+--bf16      \
+--max_epochs 1      \
+--max_len 4096      \
+--zero_stage 3      \
+--beta 0.1      \
+--learning_rate 5e-7      \
+--dataset ./HH-RLHF-CDPO-data      \
+--flash_attn      \
+--gradient_checkpointing      \
+--use_wandb YOUR_WANDB_FINGERPRINT
+```
+Note that to facilitate implementation of controllable preference SFT stage, we use the output models of the 
+SFT-based baseline method as the target policy models. 
+
+During inference, we can directly reuse the "sft_inference.py" script but replace the target model with the CDPO tuned model.
 
 ## Ethics and Impacts
 ### Broader Impacts
