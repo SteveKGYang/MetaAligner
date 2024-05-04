@@ -392,6 +392,7 @@ deepspeed ./train_cdpo.py --save_path ./UltraFeedback-modpo-model-7B      \
 --dataset ./UltraFeedback-CDPO-data      \
 --flash_attn      \
 --gradient_checkpointing      \
+--save_hf_model      \
 --use_wandb YOUR_WANDB_FINGERPRINT
 ```
 For HH-RLHF, we have:
@@ -411,12 +412,16 @@ deepspeed ./train_cdpo.py --save_path ./HH-RLHF-modpo-model-7B      \
 --dataset ./HH-RLHF-CDPO-data      \
 --flash_attn      \
 --gradient_checkpointing      \
+--save_hf_model      \
 --use_wandb YOUR_WANDB_FINGERPRINT
 ```
 Note that to facilitate implementation of controllable preference SFT stage, we use the output models of the 
 SFT-based baseline method as the target policy models. 
 
 During inference, we can directly reuse the "sft_inference.py" script but replace the target model with the CDPO tuned model.
+
+### MORLHF
+
 
 ## Ethics and Impacts
 ### Broader Impacts
