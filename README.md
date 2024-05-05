@@ -421,7 +421,58 @@ SFT-based baseline method as the target policy models.
 During inference, we can directly reuse the "sft_inference.py" script but replace the target model with the CDPO tuned model.
 
 ### MORLHF
+MORLHF extends the orginal PPO-based algorithm to multi-objective scenarios. In our paper, we implement the linear 
+scalarization realization of MORLHF. The theory is introduced in our paper. Our implementation is based on the 
+[OpenRLHF](https://github.com/OpenLLMAI/OpenRLHF) library. The first step is to train a reward model for each objective:
+Harmless, helpful, humour for HH-RLHF; instruction following, truthful, honest, and helpful for UltraFeedback. Specifically,
+put the "./HH-RLHF" dataset under baseline_models/MORLHF and use the following commands to build a reward model training set:
+```bash
+cd baseline_models/MORLHF
+python HH_RLHF_make_reward_model_data.py
+python UltraFeedback_make_reward_model_data.py
+```
 
+After obtaining the datasets, train a GPT2-based reward model for each objective with the HH-RLHF dataset, using the
+following commands:
+```bash
+deepspeed ./train_reward_model.py \
+     --objective YOUR_TARGET_OBJECTIVE
+     --save_path ./HH-RLHF-reward-model \
+     --save_steps -1 \
+     --logging_steps 1 \
+     --eval_steps -1 \
+     --micro_train_batch_size 4 \
+     --pretrain openai-community/gpt2-large \
+     --bf16 \
+     --max_epochs 1 \
+     --max_len 2048 \
+     --zero_stage 3 \
+     --learning_rate 9e-6 \
+     --dataset ./HH-RLHF-reward-model-data \
+     --flash_attn \
+     --gradient_checkpointing \
+     --use_wandb YOUR_WANDB_KEY
+```
+Similarly, train reward models for UltraFeedback with the following commands:
+```bash
+deepspeed ./train_reward_model.py \
+     --objective YOUR_TARGET_OBJECTIVE
+     --save_path ./UltraFeedback-reward-model \
+     --save_steps -1 \
+     --logging_steps 1 \
+     --eval_steps -1 \
+     --micro_train_batch_size 4 \
+     --pretrain openai-community/gpt2-large \
+     --bf16 \
+     --max_epochs 1 \
+     --max_len 2048 \
+     --zero_stage 3 \
+     --learning_rate 9e-6 \
+     --dataset ./UltraFeedback-reward-model-data \
+     --flash_attn \
+     --gradient_checkpointing \
+     --use_wandb YOUR_WANDB_KEY
+```
 
 ## Ethics and Impacts
 ### Broader Impacts
