@@ -422,9 +422,9 @@ During inference, we can directly reuse the "sft_inference.py" script but replac
 
 ### MORLHF
 MORLHF extends the orginal PPO-based algorithm to multi-objective scenarios. In our paper, we implement the linear 
-scalarization realization of MORLHF. The theory is introduced in our paper. Our implementation is based on the 
-[OpenRLHF](https://github.com/OpenLLMAI/OpenRLHF) library. The first step is to train a reward model for each objective:
-Harmless, helpful, humour for HH-RLHF; instruction following, truthful, honest, and helpful for UltraFeedback. Specifically,
+scalarization realization of MORLHF. The theory is introduced in our paper. The first step is to train a reward model for each objective:
+Harmless, helpful, humour for HH-RLHF; instruction following, truthful, honest, and helpful for UltraFeedback. Our 
+implementation is based on the [OpenRLHF](https://github.com/OpenLLMAI/OpenRLHF) library. Specifically,
 put the "./HH-RLHF" dataset under baseline_models/MORLHF and use the following commands to build a reward model training set:
 ```bash
 cd baseline_models/MORLHF
@@ -473,6 +473,29 @@ deepspeed ./train_reward_model.py \
      --gradient_checkpointing \
      --use_wandb YOUR_WANDB_KEY
 ```
+The implementation of the PPO training paradigm for MORLHF algorithm is based on the released codes of 
+[Rewards-in-Context](https://github.com/YangRui2015/RiC/tree/main) and the [trl](https://github.com/huggingface/trl) library. 
+Firstly, go to the "morlhf.py" file and fill the "reward_path_tokenizer_dict" with the paths to your trained rewards models.
+Secondly, we can train on HH-RLHF with the following command:
+```bash
+accelerate launch morlhf.py \
+          --base_model_name THE_POLICY_MODEL_PATH \
+          --reward_names 'harmless,hh-rlhf-helpful,humour' \
+          --dataset 'HH-RLHF' \
+          --wandb_name 'MORLHF_HH-RLHF_llama2_chat_7B' \
+          --save_directory './MORLHF-HH-RLHF'
+```
+Similarly, train on UltraFeedback with the following command:
+```bash
+accelerate launch morlhf.py \
+          --base_model_name THE_POLICY_MODEL_PATH \
+          --reward_names 'IF,honest,truthful,ultrafeedback-helpful' \
+          --dataset 'UltraFeedback' \
+          --wandb_name 'MORLHF_UltraFeedback_llama2_chat_7B' \
+          --save_directory './MORLHF-UltraFeedback'
+```
+Note that we use the LLaMA-Chat-7B as the base policy model, as it is instruction-tuned for dialogue tasks. 
+During inference, we can directly reuse the "sft_inference.py" script but replace the target model with the PPO-trained model.
 
 ## Ethics and Impacts
 ### Broader Impacts
