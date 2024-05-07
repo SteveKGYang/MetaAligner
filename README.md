@@ -71,7 +71,7 @@ The model can align responses of a general AI assistant considering a single-tur
 professional questions such as programming language and history, and the aligned responses are usually quite
 complicated. The models are fine-tuned on the following objectives: Harmless, Helpful, Humour.
 
-- MetaAligner-HH-RLHF-([1.1B](https://huggingface.co/MetaAligner/MetaAligner-HH-RLHF-1.1B), [7B](https://huggingface.co/MetaAligner/MetaAligner-HH-RLHF-7B), [13B](https://huggingface.co/MetaAligner/MetaAligner-HH-RLHF-1.1B)):
+- MetaAligner-HH-RLHF-([1.1B](https://huggingface.co/MetaAligner/MetaAligner-HH-RLHF-1.1B), [7B](https://huggingface.co/MetaAligner/MetaAligner-HH-RLHF-7B), [13B](https://huggingface.co/MetaAligner/MetaAligner-HH-RLHF-13B)):
 This model is fine-tuned based on the TinyLLaMA-1.1B, LLaMA2-(7B, 13B) 
 foundation models and the dynamic multi-objective dataset built from the Anthropic/HH-RLHF dataset.
 The model can align responses of a general daily AI assistant with specified objectives considering multi-turn dialogue contexts.
