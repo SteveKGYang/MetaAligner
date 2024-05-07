@@ -541,8 +541,8 @@ If you use <em>MetaAligner</em> in your work, please cite:
 
 ```
 @article{yang2024metaaligner,
-  title={MetaAligner: Conditional Weak-to-Strong Correction for Generalizable Multi-Objective Alignment of Language Models},
-  author={Yang, Kailai and Liu, Zhiwei and Xie, Qianqian and Zhang, Tianlin and Song, Nirui and Huang, Jimin and Kuang, Ziyan and Ananiadou, Sophia},
+  title={MetaAligner: Towards Generalizable Multi-Objective Alignment of Language Models},
+  author={Yang, Kailai and Liu, Zhiwei and Xie, Qianqian and Huang, Jimin and Zhang, Tianlin and Ananiadou, Sophia},
   journal={arXiv preprint arXiv:2403.17141},
   year={2024}
 }
