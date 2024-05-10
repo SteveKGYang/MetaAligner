@@ -166,10 +166,6 @@ reward values obtained from GPT-4 on the following objectives: "Instruction foll
 python UltraFeedback_make_aligner_data.py --save_directory './UltraFeedback-aligner-data'
 ```
 
-### IMHI
-Due to the sensitive nature of mental health-related texts, we will release IMHI data and scripts once the ethical review
-is finished...
-
 ### Objective Descriptions
 During the building process of the above datasets, we customize text-based descriptions for each objective to enable 
 better understanding from <em>MetaAligner</em>. We define the objectives as follows:
