@@ -33,6 +33,7 @@ Alignment of Language Models </h1>
 
 ## Contents
 - [Introduction](#introduction)
+- [Preparation](#preparation)
 - [Model Weights](#metaaligner-models )
 - [The Dynamic Multi-objective Dataset](#the-dynamic-multi-objective-dataset)
 - [Model Evaluation](#model-evaluation)
@@ -57,8 +58,15 @@ GPT-3.5 and Claude-3.
 
 [The <em>MetaAligner</em> Paper](https://arxiv.org/abs/2403.17141)
 
-## <em>MetaAligner</em> Models 
+## Preparation
 
+1. Set up the Python 3.10 environment.
+2. Build the dependencies with the following code:
+```bash
+pip install -r requirements.txt
+```
+
+## <em>MetaAligner</em> Models
 We provide the 9 models evaluated in the <em>MetaAligner</em> paper as follows. Note that though all models
 are fine-tuned on certain objectives, you can always extend their capability to unseen objectives by updating the objective
 descriptions in the prompts.
