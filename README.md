@@ -29,6 +29,7 @@ Alignment of Language Models </h1>
 ![](https://black.readthedocs.io/en/stable/_static/license.svg)
 
 ## News
+📢 *Sep. 26, 2024* The <em>MetaAligner</em> paper has been accepted by NeurIPS 2024 main track!
 📢 *Apr. 26, 2024* Release part of the <em>MetaAligner</em> models.
 
 ## Contents
